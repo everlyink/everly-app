@@ -10,9 +10,7 @@ export default function Nav({ showCompose = true }) {
 
   return (
     <nav className="nav" aria-label="primary">
-      {/* TODO: once the marketing site replaces the app on everly.ink, point this
-          at https://everly.ink. for now / redirects to /dashboard for authed users. */}
-      <Logo href="/" />
+      <Logo href="https://everly.ink" />
       <div className="nav-actions">
         {profile?.first_name && <span className="nav-user">hello, {profile.first_name}</span>}
         <div className="menu">
