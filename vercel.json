@@ -3,7 +3,17 @@
   "crons": [
     {
       "path": "/api/send-message",
-      "schedule": "0 * * * *"
+      "schedule": "0 9 * * *"
+    }
+  ]
+}
+EOcat > ~/Desktop/everly/everly-app/vercel.json << 'EOF'
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/send-message",
+      "schedule": "0 9 * * *"
     }
   ]
 }
