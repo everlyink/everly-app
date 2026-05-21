@@ -15,7 +15,18 @@ export default async function handler(req, res) {
     }
   }
 
-  const admin = getSupabaseAdmin();
+  let admin;
+  try {
+    admin = getSupabaseAdmin();
+  } catch (err) {
+    console.error('[send-message] admin client init failed:', err);
+    return res.status(500).json({
+      error: 'admin client init failed',
+      message: err.message,
+      stack: err.stack,
+    });
+  }
+
   const nowIso = new Date().toISOString();
 
   const { data: due, error } = await admin
@@ -25,8 +36,20 @@ export default async function handler(req, res) {
     .lte('deliver_at', nowIso);
 
   if (error) {
-    console.error('[send-message] query failed:', error);
-    return res.status(500).json({ error: 'query failed' });
+    console.error('[send-message] query failed:', {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+      full: error,
+    });
+    return res.status(500).json({
+      error: 'query failed',
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+    });
   }
 
   if (!due || due.length === 0) {
