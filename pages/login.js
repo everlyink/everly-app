@@ -28,11 +28,19 @@ export default function Login() {
     e.preventDefault();
     setError('');
     setSubmitting(true);
+
+    const timeout = setTimeout(() => {
+      setSubmitting(false);
+      setError('taking longer than usual. please try again, or open everly in an incognito window.');
+    }, 8000);
+
     const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+    clearTimeout(timeout);
     setSubmitting(false);
+
     if (err) {
       if (err.message?.toLowerCase().includes('invalid')) {
-        setError('that email and password don’t match. try again, or reset your password below.');
+        setError("that email and password don't match. try again, or reset your password below.");
       } else {
         setError('something went wrong. please try again in a moment.');
       }
@@ -64,7 +72,7 @@ export default function Login() {
           <p className="sub">sign in to your word clock.</p>
 
           {error && <div className="alert alert-error">{error}</div>}
-          {resetSent && <div className="alert alert-success">we’ve sent you a link to reset your password.</div>}
+          {resetSent && <div className="alert alert-success">we've sent you a link to reset your password.</div>}
 
           <form onSubmit={handleSubmit} noValidate>
             <Input
