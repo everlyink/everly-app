@@ -416,7 +416,7 @@ export default function MessageComposer({ existing }) {
             {deliverAt && (
               <span className="field-hint">
                 {formatDeliveryDate(deliverAt)}
-                {timeEnabled && ` · ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`}
+                
               </span>
             )}
           </div>
