@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import Button from '@/components/ui/Button';
 import { Input, Textarea } from '@/components/ui/Field';
 import DatePicker from '@/components/ui/DatePicker';
-import TimePicker from '@/components/ui/TimePicker';
 import ThemePicker from '@/components/ui/ThemePicker';
 import EmojiBar from '@/components/ui/EmojiBar';
 import MessagePreview from './MessagePreview';
@@ -44,12 +43,6 @@ export default function MessageComposer({ existing }) {
   const { session, profile, loading: authLoading, refreshProfile } = useAuth();
   const editing = !!existing;
 
-  const existingHasTime = existing?.deliver_at
-    ? (() => {
-        const d = new Date(existing.deliver_at);
-        return !(d.getHours() === 9 && d.getMinutes() === 0);
-      })()
-    : false;
 
   const [recipientName, setRecipientName] = useState(existing?.recipient_name || '');
   const [recipientEmail, setRecipientEmail] = useState(existing?.recipient_email || '');
@@ -57,9 +50,6 @@ export default function MessageComposer({ existing }) {
   const [channel, setChannel] = useState(existing?.delivery_channel || 'email');
   const [body, setBody] = useState(existing?.body || '');
   const [deliverAt, setDeliverAt] = useState(existing?.deliver_at ? new Date(existing.deliver_at) : null);
-  const [timeEnabled, setTimeEnabled] = useState(existingHasTime);
-  const [hour, setHour] = useState(existing?.deliver_at ? new Date(existing.deliver_at).getHours() : 9);
-  const [minute, setMinute] = useState(existing?.deliver_at ? new Date(existing.deliver_at).getMinutes() : 0);
   const [theme, setTheme] = useState(existing?.theme || 'forest');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -82,11 +72,7 @@ export default function MessageComposer({ existing }) {
       if (typeof draft.recipientPhone === 'string') setRecipientPhone(draft.recipientPhone);
       if (typeof draft.channel === 'string') setChannel(draft.channel);
       if (typeof draft.body === 'string') setBody(draft.body);
-      if (draft.deliverAt instanceof Date && !isNaN(draft.deliverAt)) setDeliverAt(draft.deliverAt);
-      if (typeof draft.timeEnabled === 'boolean') setTimeEnabled(draft.timeEnabled);
-      if (typeof draft.hour === 'number') setHour(draft.hour);
-      if (typeof draft.minute === 'number') setMinute(draft.minute);
-      if (typeof draft.theme === 'string') setTheme(draft.theme);
+      if (draft.deliverAt instanceof Date && !isNaN(draft.deliverAt)) setDeliverAt(draft.deliverAt);      if (typeof draft.theme === 'string') setTheme(draft.theme);
     }
     hydratedRef.current = true;
   }, [editing, userId]);
@@ -103,12 +89,9 @@ export default function MessageComposer({ existing }) {
       channel,
       body,
       deliverAt,
-      timeEnabled,
-      hour,
-      minute,
       theme,
     });
-  }, [editing, userId, recipientName, recipientEmail, recipientPhone, channel, body, deliverAt, timeEnabled, hour, minute, theme]);
+  }, [editing, userId, recipientName, recipientEmail, recipientPhone, channel, body, deliverAt, theme]);
 
   function insertAtCursor(char) {
     const ta = textareaRef.current;
@@ -138,7 +121,7 @@ export default function MessageComposer({ existing }) {
   const wordsRemaining = limit != null ? limit - words : null;
   const overLimit = limit != null && words > limit;
 
-  const finalDeliverAt = timeEnabled && deliverAt ? applyTime(deliverAt, hour, minute) : deliverAt;
+  const finalDeliverAt = deliverAt;
 
   useEffect(() => {
     if (authLoading || !profile) return;
@@ -304,7 +287,6 @@ export default function MessageComposer({ existing }) {
             <h1 className="review-heading">{editing ? 'ready to save these changes?' : 'ready to schedule?'}</h1>
             <p className="review-sub">
               to <strong>{recipientName}</strong> · arriving {formatDeliveryDate(finalDeliverAt)}
-              {timeEnabled && ` at ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`}
             </p>
 
             <MessagePreview
@@ -437,16 +419,6 @@ export default function MessageComposer({ existing }) {
                 {timeEnabled && ` · ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`}
               </span>
             )}
-            <TimePicker
-              enabled={timeEnabled}
-              onToggle={setTimeEnabled}
-              hour={hour}
-              minute={minute}
-              onChange={({ hour: h, minute: m }) => {
-                setHour(h);
-                setMinute(m);
-              }}
-            />
           </div>
 
           <div className="field">

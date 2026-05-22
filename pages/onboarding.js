@@ -4,7 +4,6 @@ import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import { Input, Textarea } from '@/components/ui/Field';
 import DatePicker from '@/components/ui/DatePicker';
-import TimePicker from '@/components/ui/TimePicker';
 import ThemePicker from '@/components/ui/ThemePicker';
 import MessagePreview from '@/components/message/MessagePreview';
 import { supabase } from '@/lib/supabase';
@@ -72,9 +71,6 @@ export default function Onboarding() {
   const [recipientName, setRecipientName] = useState('');
   const [body, setBody] = useState('');
   const [deliverAt, setDeliverAt] = useState(null);
-  const [timeEnabled, setTimeEnabled] = useState(false);
-  const [hour, setHour] = useState(9);
-  const [minute, setMinute] = useState(0);
   const [recipientEmail, setRecipientEmail] = useState('');
   const [theme, setTheme] = useState('forest');
   const [error, setError] = useState('');
@@ -133,11 +129,7 @@ export default function Onboarding() {
       if (typeof draft.step === 'number' && draft.step >= 1 && draft.step <= STEPS) setStep(draft.step);
       if (typeof draft.recipientName === 'string') setRecipientName(draft.recipientName);
       if (typeof draft.body === 'string') setBody(draft.body);
-      if (draft.deliverAt instanceof Date && !isNaN(draft.deliverAt)) setDeliverAt(draft.deliverAt);
-      if (typeof draft.timeEnabled === 'boolean') setTimeEnabled(draft.timeEnabled);
-      if (typeof draft.hour === 'number') setHour(draft.hour);
-      if (typeof draft.minute === 'number') setMinute(draft.minute);
-      if (typeof draft.recipientEmail === 'string') setRecipientEmail(draft.recipientEmail);
+      if (draft.deliverAt instanceof Date && !isNaN(draft.deliverAt)) setDeliverAt(draft.deliverAt);      if (typeof draft.recipientEmail === 'string') setRecipientEmail(draft.recipientEmail);
       if (typeof draft.theme === 'string') setTheme(draft.theme);
     }
     hydratedRef.current = true;
@@ -152,13 +144,10 @@ export default function Onboarding() {
       recipientName,
       body,
       deliverAt,
-      timeEnabled,
-      hour,
-      minute,
       recipientEmail,
       theme,
     });
-  }, [session, step, recipientName, body, deliverAt, timeEnabled, hour, minute, recipientEmail, theme]);
+  }, [session, step, recipientName, body, deliverAt, recipientEmail, theme]);
 
   // ---------- redirect logic ----------
   useEffect(() => {
@@ -252,7 +241,7 @@ export default function Onboarding() {
     setSaving(true);
     setError('');
 
-    const finalDeliverAt = timeEnabled ? applyTime(deliverAt, hour, minute) : deliverAt;
+    const finalDeliverAt = deliverAt;
 
     const { error: err } = await supabase.from('messages').insert({
       user_id: session.user.id,
@@ -369,20 +358,9 @@ export default function Onboarding() {
               )}
               {deliverAt && (
                 <p className="field-hint" style={{ marginTop: '0.75rem' }}>
-                  will arrive on {formatDeliveryDate(deliverAt)}
-                  {timeEnabled && ` · ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`}.
+                  will arrive on {formatDeliveryDate(deliverAt)}.
                 </p>
               )}
-              <TimePicker
-                enabled={timeEnabled}
-                onToggle={setTimeEnabled}
-                hour={hour}
-                minute={minute}
-                onChange={({ hour: h, minute: m }) => {
-                  setHour(h);
-                  setMinute(m);
-                }}
-              />
             </>
           )}
 
@@ -430,7 +408,7 @@ export default function Onboarding() {
                 senderFirstName={profile?.first_name}
                 recipientName={recipientName}
                 body={body}
-                deliverAt={timeEnabled && deliverAt ? applyTime(deliverAt, hour, minute) : deliverAt}
+                deliverAt={deliverAt}
                 theme={theme}
               />
             </section>
