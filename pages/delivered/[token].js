@@ -50,11 +50,11 @@ export default function Delivered({ message, errorReason }) {
             <div style={{ marginBottom: '2rem' }}>
               <Logo href={null} />
             </div>
-            <h1>this message isn&apos;t ready yet.</h1>
+            <h1>this message is not ready yet.</h1>
             <p>
               {errorReason === 'not-ready'
                 ? 'it may be scheduled for a later date, or the link may be incorrect.'
-                : "we couldn't find this message. please check the link, or come back later."}
+                : 'we could not find this message. please check the link, or come back later.'}
             </p>
           </div>
         </div>
@@ -101,12 +101,7 @@ export default function Delivered({ message, errorReason }) {
           <h1>dear {message.recipient_name},</h1>
           <p className="delivered-meta">
             {deliveredDate} · written {writtenDate} · delivered by{' '}
-            
-              href="https://everly.ink"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: 'inherit', textDecoration: 'underline', opacity: 0.7 }}
-            >
+            <a href="https://everly.ink" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline', opacity: 0.7 }}>
               everly
             </a>
           </p>
@@ -116,21 +111,11 @@ export default function Delivered({ message, errorReason }) {
             <span className="sparkle">✦</span> this message was written in {writtenYearOnly} and held safely until today.
           </div>
           <div className="delivered-brand">
-            
-              href="https://everly.ink"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: 'inherit', textDecoration: 'none' }}
-            >
+            <a href="https://everly.ink" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
               everly
             </a>
             {' · now in words. always in time. · '}
-            
-              href="https://everly.ink"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: 'inherit', textDecoration: 'underline', opacity: 0.7 }}
-            >
+            <a href="https://everly.ink" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline', opacity: 0.7 }}>
               everly.ink
             </a>
           </div>
@@ -139,4 +124,3 @@ export default function Delivered({ message, errorReason }) {
     </>
   );
 }
-
