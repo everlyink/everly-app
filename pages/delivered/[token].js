@@ -50,11 +50,11 @@ export default function Delivered({ message, errorReason }) {
             <div style={{ marginBottom: '2rem' }}>
               <Logo href={null} />
             </div>
-            <h1>this message isn't ready yet.</h1>
+            <h1>this message isn&apos;t ready yet.</h1>
             <p>
               {errorReason === 'not-ready'
                 ? 'it may be scheduled for a later date, or the link may be incorrect.'
-                : 'we couldn't find this message. please check the link, or come back later.'}
+                : "we couldn't find this message. please check the link, or come back later."}
             </p>
           </div>
         </div>
