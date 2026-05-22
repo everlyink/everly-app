@@ -8,7 +8,6 @@ import { themeClass } from '@/lib/plans';
 export async function getServerSideProps({ params }) {
   const { token } = params || {};
   if (!token) return { props: { message: null } };
-
   try {
     const admin = getSupabaseAdmin();
     const { data, error } = await admin.rpc('get_delivered_message', { token });
@@ -17,7 +16,6 @@ export async function getServerSideProps({ params }) {
     }
     const row = Array.isArray(data) ? data[0] : data;
     if (!row) {
-      // either not delivered yet, or token invalid
       return { props: { message: null, errorReason: 'not-ready' } };
     }
     return {
@@ -52,11 +50,11 @@ export default function Delivered({ message, errorReason }) {
             <div style={{ marginBottom: '2rem' }}>
               <Logo href={null} />
             </div>
-            <h1>this message isn’t ready yet.</h1>
+            <h1>this message isn't ready yet.</h1>
             <p>
               {errorReason === 'not-ready'
                 ? 'it may be scheduled for a later date, or the link may be incorrect.'
-                : 'we couldn’t find this message. please check the link, or come back later.'}
+                : 'we couldn't find this message. please check the link, or come back later.'}
             </p>
           </div>
         </div>
@@ -102,7 +100,15 @@ export default function Delivered({ message, errorReason }) {
           </p>
           <h1>dear {message.recipient_name},</h1>
           <p className="delivered-meta">
-            {deliveredDate} · written {writtenDate} · delivered by everly
+            {deliveredDate} · written {writtenDate} · delivered by{' '}
+            
+              href="https://everly.ink"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'inherit', textDecoration: 'underline', opacity: 0.7 }}
+            >
+              everly
+            </a>
           </p>
           <div className="delivered-divider" />
           <div className="delivered-body">{message.body}</div>
@@ -110,7 +116,23 @@ export default function Delivered({ message, errorReason }) {
             <span className="sparkle">✦</span> this message was written in {writtenYearOnly} and held safely until today.
           </div>
           <div className="delivered-brand">
-            everly · now in words. always in time. · everly.ink
+            
+              href="https://everly.ink"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'inherit', textDecoration: 'none' }}
+            >
+              everly
+            </a>
+            {' · now in words. always in time. · '}
+            
+              href="https://everly.ink"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'inherit', textDecoration: 'underline', opacity: 0.7 }}
+            >
+              everly.ink
+            </a>
           </div>
         </div>
       </div>
