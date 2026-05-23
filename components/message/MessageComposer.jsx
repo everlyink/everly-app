@@ -22,15 +22,6 @@ import {
 import { formatDeliveryDate } from '@/lib/format';
 import { readComposerDraft, writeComposerDraft, clearComposerDraft } from '@/lib/composerDraft';
 
-const SAVE_TIMEOUT_MS = 12000;
-
-function withTimeout(thenable, ms, label) {
-  return Promise.race([
-    Promise.resolve(thenable),
-    new Promise((_, reject) => setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms)),
-  ]);
-}
-
 function applyTime(date, hour, minute) {
   if (!date) return null;
   const next = new Date(date);
