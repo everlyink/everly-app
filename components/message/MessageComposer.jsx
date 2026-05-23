@@ -197,18 +197,10 @@ export default function MessageComposer({ existing }) {
 
     try {
       if (editing) {
-        const { error: err } = await withTimeout(
-          supabase.from('messages').update(payload).eq('id', existing.id),
-          SAVE_TIMEOUT_MS,
-          'message update',
-        );
+        const { error: err } = await supabase.from('messages').update(payload).eq('id', existing.id);
         if (err) throw err;
       } else {
-        const { error: err } = await withTimeout(
-          supabase.from('messages').insert({ ...payload, user_id: userId }),
-          SAVE_TIMEOUT_MS,
-          'message insert',
-        );
+        const { error: err } = await supabase.from('messages').insert({ ...payload, user_id: userId });
         if (err) throw err;
 
         // best-effort increment of messages_used. don't block the success
@@ -234,9 +226,7 @@ export default function MessageComposer({ existing }) {
     } catch (e) {
       console.error('[everly] save error:', e);
       setSaving(false);
-      const message = e?.message?.toLowerCase().includes('timed out')
-        ? 'this is taking longer than usual. please check your connection and try again.'
-        : 'something went wrong scheduling your message. please try again.';
+      const message = 'something went wrong scheduling your message. please try again.';
       setError(message);
     }
   }
