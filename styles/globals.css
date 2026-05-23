@@ -1863,3 +1863,10 @@ p {
   color: var(--forest);
   border: 1px solid rgba(44, 74, 62, 0.2);
 }
+
+.message-card-email {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: rgba(28,28,26,0.45);
+  margin-top: 0.15rem;
+}

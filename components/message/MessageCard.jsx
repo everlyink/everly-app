@@ -30,6 +30,9 @@ export default function MessageCard({ message, profile, onDuplicate, onCancel })
         <div>
           <h3 className="message-card-recipient">{message.recipient_name}</h3>
           <div className="message-card-date">{formatDeliveryDate(message.deliver_at)}</div>
+          {message.recipient_email && (
+            <div className="message-card-email">{message.recipient_email}</div>
+          )}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <StatusBadge status={message.status} />
