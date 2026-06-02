@@ -74,7 +74,7 @@ export default function Delivered({ message, errorReason }) {
               <Logo href={null} />
             </div>
             <h1>you have a message.</h1>
-            <p>someone wrote this for you — and chose today to send it.</p>
+            <p>{message?.sender_first_name ? `${message.sender_first_name} wrote this for you` : 'someone wrote this for you'} — and chose today to send it.</p>
             <button type="button" className="btn btn-primary" onClick={() => setOpened(true)}>
               open your message →
             </button>
