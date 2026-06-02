@@ -62,6 +62,7 @@ export default async function handler(req, res) {
     .from('profiles')
     .select('id, first_name')
     .in('id', senderIds);
+  console.log("[everly] senders fetched:", JSON.stringify(senders));
   const senderMap = new Map((senders || []).map((s) => [s.id, s.first_name]));
 
   let sent = 0;
