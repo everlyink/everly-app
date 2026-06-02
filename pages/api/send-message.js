@@ -69,7 +69,11 @@ export default async function handler(req, res) {
   let failed = 0;
 
   for (const message of due) {
-    const senderFirstName = senderMap.get(message.user_id);
+    let senderFirstName = senderMap.get(message.user_id);
+    if (!senderFirstName) {
+      const { data: p } = await admin.from('profiles').select('first_name').eq('id', message.user_id).single();
+      senderFirstName = p?.first_name || null;
+    }
     let providerResponse = null;
     let status = 'failed';
 
