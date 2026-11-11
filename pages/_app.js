@@ -44,6 +44,7 @@ export default function App({ Component, pageProps }) {
         <meta name="theme-color" content="#FAFAF8" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<script>!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");oaiq("init",{pixelId:"3nuozLBZDfGc1oZemFsYPt",debug:true});</script>
       </Head>
       <Component {...pageProps} />
     </AuthProvider>
