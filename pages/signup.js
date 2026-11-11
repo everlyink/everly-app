@@ -61,6 +61,7 @@ export default function Signup() {
 
     // if email confirmation is required by the Supabase project, no session is created
     if (!data.session) {
+      oaiq("measure", "registration_completed", { type: "customer_action" });
       setConfirmSent(true);
       return;
     }
