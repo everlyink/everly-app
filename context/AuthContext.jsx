@@ -135,7 +135,9 @@ export function AuthProvider({ children }) {
       if (!mounted) return;
       setSession(newSession);
       if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && newSession?.user) {
-        trackVerifiedRegistration(newSession.user);
+        // defer + guard: tracking must never block or break sign-in/profile loading
+        const u = newSession.user;
+        setTimeout(() => { try { trackVerifiedRegistration(u); } catch {} }, 0);
       }
 
       // Supabase fires TOKEN_REFRESHED roughly hourly (and on bfcache restore).
