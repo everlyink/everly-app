@@ -1,9 +1,20 @@
 import '@/styles/globals.css';
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { pageView } from '@/lib/pixel';
+import ConsentBanner from '@/components/layout/ConsentBanner';
 import Head from 'next/head';
 import { AuthProvider } from '@/context/AuthContext';
 
 export default function App({ Component, pageProps }) {
+  const router = useRouter();
+  useEffect(() => {
+    pageView();
+    const h = () => pageView();
+    router.events.on('routeChangeComplete', h);
+    return () => router.events.off('routeChangeComplete', h);
+  }, [router.events]);
+
   // on mobile, when an input/textarea gets focus, scroll it to the centre of
   // the visible viewport after the soft keyboard has finished animating.
   // iOS does this by default for plain inputs, but the behaviour is patchy
@@ -44,9 +55,9 @@ export default function App({ Component, pageProps }) {
         <meta name="theme-color" content="#FAFAF8" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<script>!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");oaiq("init",{pixelId:"3nuozLBZDfGc1oZemFsYPt",debug:true});</script>
       </Head>
       <Component {...pageProps} />
+      <ConsentBanner />
     </AuthProvider>
   );
 }

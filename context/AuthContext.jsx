@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
+import { trackVerifiedRegistration } from '@/lib/pixel';
 
 const AuthContext = createContext({
   session: null,
@@ -133,6 +134,9 @@ export function AuthProvider({ children }) {
     const { data: sub } = supabase.auth.onAuthStateChange(async (event, newSession) => {
       if (!mounted) return;
       setSession(newSession);
+      if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && newSession?.user) {
+        trackVerifiedRegistration(newSession.user);
+      }
 
       // Supabase fires TOKEN_REFRESHED roughly hourly (and on bfcache restore).
       // The profile row hasn't changed — refetching it would unnecessarily flip
