@@ -12,6 +12,7 @@ export default function Footer() {
       </div>
       <div className="footer-right">
         <a href="https://everly.ink/blog.html" className="footer-link">journal</a>
+        {' · '}<a href="https://everly.ink/privacy.html" className="footer-link">privacy</a>
       </div>
     </footer>
   );
